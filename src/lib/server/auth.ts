@@ -44,15 +44,15 @@ export async function validateSessionToken(token: string): Promise<SessionValida
         session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
         await db
             .update(sessionTable)
-            .set({
-                expiresAt: session.expiresAt
-            })
+            .set({ expiresAt: session.expiresAt })
             .where(eq(sessionTable.id, session.id));
     }
     return { session, user };
 }
 
-export async function invalidateSessionToken(sessionId: string) Promise < void> {};
+export async function invalidateSessionToken(sessionId: string): Promise<void> {
+    await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+};
 
 export type SessionValidationResult =
     | { session: Session, user: User; }
