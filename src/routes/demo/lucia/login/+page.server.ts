@@ -28,7 +28,7 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password' });
 		}
 
-		const results = await db.select().from(table.user).where(eq(table.user.username, username));
+		const results = await db.select().from(table.userTable).where(eq(table.userTable.username, username));
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
@@ -78,7 +78,7 @@ export const actions: Actions = {
 		});
 
 		try {
-			await db.insert(table.user).values({ id: userId, username, passwordHash });
+			await db.insert(table.userTable).values({ id: userId, username, passwordHash });
 
 			const session = await auth.createSession(userId);
 			event.cookies.set(auth.sessionCookieName, session.id, {
